@@ -20,36 +20,35 @@ exports.generateExam = function(req,res,next){
 
 
 exports.answerExam = function (req,res,next) {
-    const request = new sql.Request();
-    request.input('stdId',sql.Int,req.body.studentID);
-    request.input('examId',sql.Int,req.body.examID);
-    request.input('qus1ID',sql.Int,req.body.ques1ID);
-    request.input('ans1',sql.VarChar,req.body.answer1);
-    request.input('qus2ID',sql.Int,req.body.ques2ID);
-    request.input('ans2',sql.VarChar,req.body.answer2);
-    request.input('qus3ID',sql.Int,req.body.ques3ID);
-    request.input('ans3',sql.VarChar,req.body.answer3);
-    request.input('qus4ID',sql.Int,req.body.ques4ID);
-    request.input('ans4',sql.VarChar,req.body.answer4);
-    request.input('qus5ID',sql.Int,req.body.ques5ID);
-    request.input('ans5',sql.VarChar,req.body.answer5);
-    request.input('qus6ID',sql.Int,req.body.ques6ID);
-    request.input('ans6',sql.VarChar,req.body.answer6);
-    request.input('qus7ID',sql.Int,req.body.ques7ID);
-    request.input('ans7',sql.VarChar,req.body.answer7);
-    request.input('qus8ID',sql.Int,req.body.ques8ID);
-    request.input('ans8',sql.VarChar,req.body.answer8);
-    request.input('qus9ID',sql.Int,req.body.ques9ID);
-    request.input('ans9',sql.VarChar,req.body.answer9);
-    request.input('qus10ID',sql.Int,req.body.ques10ID);
-    request.input('ans10',sql.VarChar,req.body.answer10);
+    const request1 = new sql.Request();
+    request1.input('stdId',sql.Int,req.body.studentID);
+    request1.input('examId',sql.Int,req.body.examID);
+    for(let i=1 ; i<=10 ; i++){
+        request1.input(`qus${i}ID`,sql.Int,eval(`req.body.ques${i}ID`));
+        request1.input(`ans${i}`,sql.VarChar,eval(`req.body.answer${i}`));
+    }
 
-    request.execute('studentAnswerExam',(err,result)=>{
-        try{
-            res.status(200).json({Data:result,Message:"Answers posted successfully"});
-        }catch{
-            res.status(404).json({Data:err});
-        }
+    request1.execute('studentAnswerExam',(err,result)=>{
+
     });
+
+    for(let i=1; i<=10 ; i++){
+        let request2 = new sql.Request();
+        request2.input('st_id',sql.Int,req.body.studentID);
+        request2.input('Ex_id',sql.Int,req.body.examID);
+        request2.input('q_Id',sql.Int,eval(`req.body.ques${i}ID`));
+        request2.input('st_ans',sql.VarChar,eval(`req.body.answer${i}`));
+        request2.execute('correct_Exam',(err,result)=>{
+            console.log(result);
+        })
+    }
+
+    let request3 = new sql.Request();
+    request3.input('std_ID',sql.Int,req.body.studentID);
+    request3.input('c_ID',sql.Int,145);
+    request3.execute('getStudentGradeInCourse',(err,result)=>{
+        res.status(200).json({Data:result})
+    })
+
 
 }
