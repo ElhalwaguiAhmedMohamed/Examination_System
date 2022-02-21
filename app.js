@@ -5,7 +5,7 @@ const sql = require("mssql");
 const port = 8000;
 const app = express();
 const authenticationRouter = require("./routers/authenticationRouter");
-
+const examRouter = require("./routers/examRouter");
 
 
 const config = {
@@ -51,7 +51,7 @@ app.use("/home", (req, res) => {
 
 app.use(authenticationRouter);
 
-
+app.use("/exam",examRouter);
 
 app.use((err,req,res,next)=>{
     res.end(`This is the error : ${JSON.stringify(err)}`);
