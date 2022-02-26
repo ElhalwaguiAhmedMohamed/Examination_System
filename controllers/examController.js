@@ -10,11 +10,39 @@ exports.generateExam = function(req,res,next){
 
     console.log(tf_questionNumber,multipleChoiceNumber);
     const request = new sql.Request();
-    request.input('c_name',sql.VarChar(20),'JavaScript');
+    request.input('c_name',sql.VarChar(20),req.body.cname);
     request.input('tf_Number',sql.Int,tf_questionNumber);
     request.input('multipleChoice_Number',sql.Int,multipleChoiceNumber);
     request.execute('GenerateExam',(err,result)=>{
-        res.status(200).json({Data:result.recordsets});
+        console.log(result);
+        let comingResult = result.recordsets[0];
+        let questionsArr = [];
+        if(tf_questionNumber>7){
+            tf_questionNumber=5;
+        }
+        if(multipleChoiceNumber>7){
+            multipleChoiceNumber=5;
+        }
+        for(let i=0 ; i < (tf_questionNumber*2) ; i+=2){
+            questionsArr.push({question:comingResult[i].ques_Body,answer1:'True',answer2:'False'});
+        }
+
+        let choice1='';
+        let choice2='';
+        let choice3='';
+        let choice4='';
+        for(let i=tf_questionNumber*2 ; i < comingResult.length ; i+=4){
+            choice1 = comingResult[i].choice;
+            choice2 = comingResult[i+1].choice;
+            choice3 = comingResult[i+2].choice;
+            choice4 = comingResult[i+3].choice;
+            questionsArr.push({question:comingResult[i].ques_Body,answer1:choice1,answer2:choice2,answer3:choice3,answer4:choice4});
+
+        }
+        res.status(200).json({Data:questionsArr});
+
+
+
     });
 }
 
