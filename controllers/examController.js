@@ -7,7 +7,6 @@ exports.generateExam = function(req,res,next){
     tf_questionNumber = Math.floor(Math.random()*9)+1;
     multipleChoiceNumber =  10 - tf_questionNumber ;
 
-
     console.log(tf_questionNumber,multipleChoiceNumber);
     const request = new sql.Request();
     request.input('c_name',sql.VarChar(20),req.body.cname);
@@ -24,7 +23,7 @@ exports.generateExam = function(req,res,next){
             multipleChoiceNumber=5;
         }
         for(let i=0 ; i < (tf_questionNumber*2) ; i+=2){
-            questionsArr.push({question:comingResult[i].ques_Body,answer1:'True',answer2:'False'});
+            questionsArr.push({questionID:comingResult[i].ques_ID,question:comingResult[i].ques_Body,answer1:'True',answer2:'False'});
         }
 
         let choice1='';
@@ -36,7 +35,7 @@ exports.generateExam = function(req,res,next){
             choice2 = comingResult[i+1].choice;
             choice3 = comingResult[i+2].choice;
             choice4 = comingResult[i+3].choice;
-            questionsArr.push({question:comingResult[i].ques_Body,answer1:choice1,answer2:choice2,answer3:choice3,answer4:choice4});
+            questionsArr.push({questionID:comingResult[i].ques_ID,question:comingResult[i].ques_Body,answer1:choice1,answer2:choice2,answer3:choice3,answer4:choice4});
 
         }
         res.status(200).json({Data:questionsArr});
