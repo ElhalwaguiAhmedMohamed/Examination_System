@@ -6,7 +6,7 @@ const port = 8000;
 const app = express();
 const authenticationRouter = require("./routers/authenticationRouter");
 const examRouter = require("./routers/examRouter");
-
+const cors = require("cors");
 
 const config = {
     server: 'localhost',
@@ -39,6 +39,10 @@ sql.connect(config).then(()=>{
 
 //*MiddleWares*//
 
+
+app.use(cors({
+  origin:"http://127.0.0.1:5501",
+}));
 app.use(morgan("dev")); //by default calls the next middleware
 
 
