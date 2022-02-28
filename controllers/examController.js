@@ -16,10 +16,10 @@ exports.generateExam = function(req,res,next){
         console.log(result);
         let comingResult = result.recordsets[0];
         let questionsArr = [];
-        if(tf_questionNumber>7){
+        if(tf_questionNumber>5){
             tf_questionNumber=5;
         }
-        if(multipleChoiceNumber>7){
+        if(multipleChoiceNumber>5){
             multipleChoiceNumber=5;
         }
         for(let i=0 ; i < (tf_questionNumber*2) ; i+=2){
@@ -31,10 +31,12 @@ exports.generateExam = function(req,res,next){
         let choice3='';
         let choice4='';
         for(let i=tf_questionNumber*2 ; i < comingResult.length ; i+=4){
-            choice1 = comingResult[i].choice;
-            choice2 = comingResult[i+1].choice;
-            choice3 = comingResult[i+2].choice;
-            choice4 = comingResult[i+3].choice;
+                console.log(i);
+                choice1 = comingResult[i].choice;
+                choice2 = comingResult[i+1].choice;
+                choice3 = comingResult[i+2].choice;
+                choice4 = comingResult[i+3].choice;
+
             questionsArr.push({questionID:comingResult[i].ques_ID,question:comingResult[i].ques_Body,answer1:choice1,answer2:choice2,answer3:choice3,answer4:choice4});
 
         }
